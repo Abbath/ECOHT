@@ -16,6 +16,8 @@ struct LayerStruct{
     QComboBox* activationFunction;
 };
 
+typedef QPair < qint32, quint32 > LayerInfo;
+typedef QVector < LayerInfo > LayersInfo;
 typedef QVector < LayerStruct > LayersGUI;
 
 namespace Ui{
@@ -35,6 +37,7 @@ private:
     LayersGUI layers;
     qint32 currLayerNumber;
     void showResults(const Dataset& data);
+    LayersInfo getLayerInfo();
 public slots:
     void plot(QVector<QPointF>&);
     void saveImage();

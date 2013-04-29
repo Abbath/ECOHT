@@ -47,7 +47,6 @@ void MainWindow::saveImage(){
 }
 
 void MainWindow::changeLayers( int layersNumber ){
-    //layers.resize(layersNumber);
     if( layersNumber > currLayerNumber ){
         layers.resize( layersNumber );
     }
@@ -69,6 +68,7 @@ void MainWindow::changeLayers( int layersNumber ){
             ui->layersGrid->addItem( (*it).sSpacer, num, 3 );
             ui->layersGrid->addWidget( (*it).activationFunction, num, 4, 1, 1 );
         }
+
         if( num <= currLayerNumber && num > layersNumber ){
             ui->layersGrid->removeWidget( (*it).label );
             ui->layersGrid->removeItem( (*it).fSpacer );
@@ -82,23 +82,24 @@ void MainWindow::changeLayers( int layersNumber ){
             delete (*it).sSpacer;
             delete (*it).activationFunction;
         }
+
         ui->layersGrid->update();
     }
+
     if( layersNumber < currLayerNumber ){
         layers.resize( layersNumber );
     }
+
     currLayerNumber = layersNumber;
 }
 
 void MainWindow::showResults(const Dataset & data){
     quint32 tableWidth = data.first().first.size() + data.first().second.size();
     quint32 inputLength = data.first().first.size();
-    QStandardItemModel dataModel(data.size(), tableWidth);
     ui->resultsTable->setColumnCount( tableWidth );
-    ui->resultsTable->setRowCount(data.size());
+    ui->resultsTable->setRowCount( data.size() );
+
     QStringList labelsList;
-
-
     for ( qint32 i=1; i <= data.first().first.size(); ++i ){
         labelsList.append( QString( "x" ) + QString::number( i ) );
     }
@@ -109,17 +110,25 @@ void MainWindow::showResults(const Dataset & data){
 
     ui->resultsTable->setHorizontalHeaderLabels( labelsList );
 
-    for ( auto it = data.begin(); it != data.end(); ++it ){
-        for ( auto itInputs = (*it).first.begin(); itInputs != (*it).first.end(); ++itInputs ){
+    for ( auto it = data.constBegin(); it != data.constEnd(); ++it ){
+        for ( auto itInputs = (*it).first.constBegin(); itInputs != (*it).first.constEnd(); ++itInputs ){
             QTableWidgetItem *item = new QTableWidgetItem( QString::number( *itInputs ));
-            ui->resultsTable->setItem( it - data.begin(), itInputs - (*it).first.begin(), item );
+            ui->resultsTable->setItem( it - data.constBegin(), itInputs - (*it).first.constBegin(), item );
         }
 
-        for ( auto itOutputs = (*it).second.begin(); itOutputs != (*it).second.end(); ++itOutputs ){
+        for ( auto itOutputs = (*it).second.constBegin(); itOutputs != (*it).second.constEnd(); ++itOutputs ){
             QTableWidgetItem *item = new QTableWidgetItem( QString::number( *itOutputs ));
-            ui->resultsTable->setItem( it - data.begin(), itOutputs - (*it).second.begin() + inputLength, item );
+            ui->resultsTable->setItem( it - data.constBegin(), itOutputs - (*it).second.constBegin() + inputLength, item );
         }
     }
+}
 
+LayersInfo MainWindow::getLayerInfo(){
+    LayersInfo result;
 
+    for ( auto it = layers.constBegin(); it != layers.constEnd(); ++it ){
+        result.append( LayerInfo((*it).neuronsNumber->value(), (*it).activationFunction->currentIndex() ) );
+    }
+
+    return result;
 }
