@@ -3,8 +3,10 @@
 
 #include <QMainWindow>
 #include <QtGui>
+#include <QtCore>
 #include <qwt.h>
 #include <qwt_plot_curve.h>
+#include <Preprocessor.hpp>
 
 struct LayerStruct{
     QLabel* label;
@@ -32,6 +34,7 @@ private:
     QwtPlotCurve *curve;
     LayersGUI layers;
     qint32 currLayerNumber;
+    void showResults(const Dataset& data);
 public slots:
     void plot(QVector<QPointF>&);
     void saveImage();

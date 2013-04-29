@@ -19,6 +19,10 @@ MainWindow::MainWindow(QWidget *parent)
     curve->setPen(pen);
     curve->attach(ui->qwtPlot);
 
+    Preprocessor p;
+    Dataset d = p.readFile("1.dat");
+    showResults(d);
+
     connect(ui->saveImageButton,SIGNAL(clicked()),this,SLOT(saveImage()));
     connect(ui->numberOfLayers,SIGNAL(valueChanged(int)),this,SLOT(changeLayers(int)));
 }
@@ -84,4 +88,38 @@ void MainWindow::changeLayers( int layersNumber ){
         layers.resize( layersNumber );
     }
     currLayerNumber = layersNumber;
+}
+
+void MainWindow::showResults(const Dataset & data){
+    quint32 tableWidth = data.first().first.size() + data.first().second.size();
+    quint32 inputLength = data.first().first.size();
+    QStandardItemModel dataModel(data.size(), tableWidth);
+    ui->resultsTable->setColumnCount( tableWidth );
+    ui->resultsTable->setRowCount(data.size());
+    QStringList labelsList;
+
+
+    for ( qint32 i=1; i <= data.first().first.size(); ++i ){
+        labelsList.append( QString( "x" ) + QString::number( i ) );
+    }
+
+    for ( qint32 i=1; i <= data.first().second.size(); ++i ){
+        labelsList.append( QString( "y" ) + QString::number( i ) );
+    }
+
+    ui->resultsTable->setHorizontalHeaderLabels( labelsList );
+
+    for ( auto it = data.begin(); it != data.end(); ++it ){
+        for ( auto itInputs = (*it).first.begin(); itInputs != (*it).first.end(); ++itInputs ){
+            QTableWidgetItem *item = new QTableWidgetItem( QString::number( *itInputs ));
+            ui->resultsTable->setItem( it - data.begin(), itInputs - (*it).first.begin(), item );
+        }
+
+        for ( auto itOutputs = (*it).second.begin(); itOutputs != (*it).second.end(); ++itOutputs ){
+            QTableWidgetItem *item = new QTableWidgetItem( QString::number( *itOutputs ));
+            ui->resultsTable->setItem( it - data.begin(), itOutputs - (*it).second.begin() + inputLength, item );
+        }
+    }
+
+
 }

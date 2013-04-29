@@ -569,43 +569,7 @@
             </widget>
            </item>
            <item>
-            <widget class="QTableWidget" name="resultsTable">
-             <property name="toolTip">
-              <string>Table of results</string>
-             </property>
-             <property name="columnCount">
-              <number>4</number>
-             </property>
-             <attribute name="horizontalHeaderDefaultSectionSize">
-              <number>100</number>
-             </attribute>
-             <attribute name="horizontalHeaderMinimumSectionSize">
-              <number>45</number>
-             </attribute>
-             <attribute name="verticalHeaderDefaultSectionSize">
-              <number>30</number>
-             </attribute>
-             <column>
-              <property name="text">
-               <string>N</string>
-              </property>
-             </column>
-             <column>
-              <property name="text">
-               <string>x1</string>
-              </property>
-             </column>
-             <column>
-              <property name="text">
-               <string>x2</string>
-              </property>
-             </column>
-             <column>
-              <property name="text">
-               <string>y</string>
-              </property>
-             </column>
-            </widget>
+            <widget class="QTableWidget" name="resultsTable"/>
            </item>
           </layout>
          </widget>
@@ -712,7 +676,6 @@
   <tabstop>startButton</tabstop>
   <tabstop>stopButton</tabstop>
   <tabstop>saveButton</tabstop>
-  <tabstop>resultsTable</tabstop>
  </tabstops>
  <resources/>
  <connections/>
